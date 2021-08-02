@@ -73,9 +73,12 @@ class MainClass
   queue.enqueue(5)
   queue.printQueue
 
+  puts 'Front of the Queue is:'
+  puts queue.front
+  
   queue.dequeue
   queue.printQueue
 
   puts 'Front of the Queue is:'
-  queue.front
+  puts queue.front
 end
