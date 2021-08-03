@@ -7,7 +7,7 @@ class LinkedList
     temp = Node.new(value)
     if @head
       temp1 = @head
-      while(temp1.next != nil)
+      while(!temp1.next.nil?)
         temp1 = temp1.next
       end
       temp1.next = temp
@@ -64,7 +64,7 @@ class LinkedList
     next_node = nil
     # return if temp == nil || temp.next == nil
 
-    while(current != nil)
+    while(!current.nil?)
       next_node = current.next
       current.next = prev
       prev = current
@@ -84,20 +84,48 @@ class LinkedList
     node.next = nil
   end
 
-  def list_count
+  def get_node(positionFromTail)
+    if @head == nil || positionFromTail < 0
+        return
+    end
+    count = get_count
+    if positionFromTail > count
+       return
+    end
     temp = @head
+    (0...(count - positionFromTail - 1)).each do
+        temp = temp.next
+    end
+    temp.data
+  end
+
+  def get_count
     count = 0
-    while(temp != nil)
-      count = count + 1
-      temp = temp.next
+    temp = @head
+    while(!temp.nil?)
+        count = count + 1
+        temp = temp.next
     end
     count
+  end
+
+  def remove_duplicate
+    return if @head.nil?
+
+    temp = @head
+    while(!temp.next.nil?)
+      if temp.data == temp.next.data
+        temp.next = temp.next.next
+      else
+        temp = temp.next
+      end
+    end
   end
 
   def print_list
     temp = @head
     puts 'List is: '
-    while(temp != nil)
+    while(!temp.nil?)
       puts temp.data
       temp = temp.next
     end
@@ -109,7 +137,7 @@ class LinkedList
     next_node = nil
 
     puts 'Reverse printed list is:'
-    while(current != nil)
+    while(!current.nil?)
       puts current.data
 
       next_node = current.next
@@ -120,14 +148,14 @@ class LinkedList
   end
 
   def print_list_recursion(node)
-    return if node == nil
+    return if node.nil?
 
     puts node.data
     print_list_recursion(node.next)      
   end
 
   def reverse_print_list_recursion(node)
-    return if node == nil
+    return if node.nil?
 
     reverse_print_list_recursion(node.next)
     puts node.data
@@ -144,50 +172,140 @@ class Node
   end
 end
 
-class MainClass
-  def main_func
-    # list = LinkedList.new
+class CompareClass
+  def compare_list(head1, head2)
+    return true if head1.nil? && !head2.nil?
 
-    # puts 'Insert list values:'
-    # while true
-    #   if user_input = gets.chomp.to_i
-    #     list.insert_end(user_input)
-    #   else
-    #     break
-    #   end
-    # end
+    return false if ((head1.nil? && !head2.nil?) || (!head1.nil? && head2.nil?))
 
-    list = LinkedList.new
-    list.insert_end(10)
-    list.insert_end(20)
-    list.insert_end(30)
-    list.insert_end(40)
+    while(!head1.nil? && !head2.nil? && head1.data == head2.data)
+      head1 = head1.next
+      head2 = head2.next
+    end
 
-    list.print_list
-    # puts 'Printing list using recursion:'
-    # list.print_list_recursion(list.instance_variable_get(:@head))
-
-    # # list.reverse_print_list
-    # puts 'Reverse printing list using recursion:'
-    # list.reverse_print_list_recursion(list.instance_variable_get(:@head))
-
-    # list = LinkedList.new
-    # list.insert_start(10)
-    # list.insert_start(20)
-    # list.insert_start(30)
-    # list.insert_start(40)
-
-    # list = LinkedList.new
-    # list.insert_position(2,1)
-    # list.insert_position(3,2)
-    # list.insert_position(4,1)
-    # list.insert_position(5,2)
-
-    # list.delete_position(2)
-    # list.print_list
-
-    # list.reverse_list
-    list.reverse_list_recursion(list.instance_variable_get(:@head))
-    list.print_list
+    head1 == head2
   end
+end
+
+class MergeLinkedList
+  def merge(head1, head2)
+    if head1.nil? && head2.nil?
+      puts 'No list to merge.'
+      return head1
+    end
+
+    return head2 if head1.nil? && !head2.nil?
+
+    return head1 if !head1.nil? && head2.nil?
+
+    new_node = Node.new(0)
+    head3 = new_node
+
+    while(!head1.nil? && !head2.nil?)
+      if(head1.data < head2.data)
+        head3.next = head1
+        head1 = head1.next
+      else
+        head3.next = head2
+        head2 = head2.next
+      end
+      head3 = head3.next
+    end
+
+    while(!head1.nil?)
+      head3.next = head1
+      head1 = head1.next
+      head3 = head3.next
+    end
+
+    while(!head2.nil?)
+      head3.next = head2
+      head2 = head2.next
+      head3 = head3.next
+    end
+
+    new_node.next
+  end
+
+  def print_list_with_node(node)
+    temp = node
+    puts 'List is: '
+    while(temp != nil)
+      puts temp.data
+      temp = temp.next
+    end
+  end
+end
+
+class MainClass
+  # list = LinkedList.new
+  # list.insert_end(10)
+  # list.insert_end(20)
+  # list.insert_end(30)
+  # list.insert_end(40)
+  # list.print_list
+
+  list = LinkedList.new
+  list.insert_end(10)
+  list.insert_end(20)
+  list.insert_end(20)
+  list.insert_end(30)
+  list.insert_end(40)
+  list.print_list
+
+  list.remove_duplicate
+  list.print_list
+
+  # list1 = LinkedList.new
+  # list1.insert_end(15)
+  # list1.insert_end(25)
+  # list1.insert_end(35)
+  # list1.insert_end(45)
+  # list1.print_list
+
+  # merge_list = MergeLinkedList.new
+  # new_list = merge_list.merge(list.instance_variable_get(:@head), list1.instance_variable_get(:@head))
+  # puts 'List after merging is:'
+  # merge_list.print_list_with_node(new_list)
+
+  # list1 = LinkedList.new
+  # list1.insert_end(10)
+  # list1.insert_end(20)
+  # list1.insert_end(30)
+  # list1.insert_end(40)
+  # list1.print_list
+
+  # compare_class = CompareClass.new
+  # isSame = compare_class.compare_list(list.instance_variable_get(:@head), list1.instance_variable_get(:@head))
+
+  # if isSame
+  #   puts 'Both the list are same.'
+  # else
+  #   puts 'Both the list are not same.'
+  # end
+
+  # puts 'Printing list using recursion:'
+  # list.print_list_recursion(list.instance_variable_get(:@head))
+  # # list.reverse_print_list
+  # puts 'Reverse printing list using recursion:'
+  # list.reverse_print_list_recursion(list.instance_variable_get(:@head))
+  # list = LinkedList.new
+  # list.insert_start(10)
+  # list.insert_start(20)
+  # list.insert_start(30)
+  # list.insert_start(40)
+  # list = LinkedList.new
+  # list.insert_position(2,1)
+  # list.insert_position(3,2)
+  # list.insert_position(4,1)
+  # list.insert_position(5,2)
+  # list.delete_position(2)
+  # list.print_list
+  # list.reverse_list
+  # list.reverse_list_recursion(list.instance_variable_get(:@head))
+  # list.print_list
+
+  # position = 2
+  # puts "Value for position #{position} from the tail is:"
+  # puts list.get_node(position)
 end

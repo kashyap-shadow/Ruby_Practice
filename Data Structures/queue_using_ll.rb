@@ -25,7 +25,7 @@ class QueueUsingLL
   end
 
   def isEmpty?
-    return true if @front == nil && @rear == nil
+    return true if @front.nil? && @rear.nil?
   end
 
   def front
@@ -38,7 +38,7 @@ class QueueUsingLL
     temp = @front
 
     puts 'Queue is:'
-    while(temp != nil)
+    while(!temp.nil?)
       puts temp.data
       temp = temp.next
     end
