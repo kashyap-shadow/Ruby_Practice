@@ -160,6 +160,24 @@ class LinkedList
     reverse_print_list_recursion(node.next)
     puts node.data
   end
+
+  def find_merge_node(head2)
+    temp1 = @head
+    temp2 = head2
+
+    node_array = []
+    while(!temp1.nil?)
+      node_array << temp1
+      temp1 = temp1.next
+    end
+
+    while(!temp2.nil?)
+      return temp2.data if node_array.include?(temp2)
+
+      temp2 = temp2.next
+    end
+    return 0
+  end
 end
 
 class Node
@@ -245,16 +263,16 @@ class MainClass
   # list.insert_end(40)
   # list.print_list
 
-  list = LinkedList.new
-  list.insert_end(10)
-  list.insert_end(20)
-  list.insert_end(20)
-  list.insert_end(30)
-  list.insert_end(40)
-  list.print_list
+  # list = LinkedList.new
+  # list.insert_end(10)
+  # list.insert_end(20)
+  # list.insert_end(20)
+  # list.insert_end(30)
+  # list.insert_end(40)
+  # list.print_list
 
-  list.remove_duplicate
-  list.print_list
+  # list.remove_duplicate
+  # list.print_list
 
   # list1 = LinkedList.new
   # list1.insert_end(15)
@@ -308,4 +326,20 @@ class MainClass
   # position = 2
   # puts "Value for position #{position} from the tail is:"
   # puts list.get_node(position)
+
+  list1 = LinkedList.new
+  list1.insert_end(10)
+  list1.insert_end(20)
+  list1.insert_end(30)
+  list1.insert_end(40)
+  puts 'List 1 is:'
+  list1.print_list
+
+  list2 = LinkedList.new
+  list2.instance_variable_set(:@head, list1.instance_variable_get(:@head).next)
+  puts 'List 2 is:'
+  list2.print_list
+
+  puts 'Merge node is:'
+  list1.find_merge_node(list2.instance_variable_get(:@head))
 end
